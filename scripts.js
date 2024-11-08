@@ -44,45 +44,46 @@ function logAlgorithmStep(nodes, index) {
   
 // includes formatted logging of algorithm steps and final distance
 function findPath() {
-    const startBuilding = document.getElementById('startBuilding').value;
-    const endBuilding = document.getElementById('endBuilding').value;
-    const algorithm = document.getElementById('algorithmSelect').value;
-  
-    if (!startBuilding || !endBuilding) {
+  const startBuilding = document.getElementById('startBuilding').value;
+  const endBuilding = document.getElementById('endBuilding').value;
+  const algorithm = document.getElementById('algorithmSelect').value;
+
+  if (!startBuilding || !endBuilding) {
       alert("Please select both start and end buildings.");
       return;
-    }
-  
-    // call the algorithms and retrieve the result
-    const result = executeAlgorithm(campusGraph, algorithm, startBuilding, endBuilding);
-  
-    const paths = result.path;
-    const totalDistance = result.distance;
-  
-    // clear previous output
-    const outputArea = document.getElementById("outputArea");
-    outputArea.innerHTML = "";
-  
-    if (paths) {
-      // if paths[0] is an array, we treat it as multiple paths (for DFS)
+  }
+
+  // call algorithms and retrieve the result
+  const result = executeAlgorithm(campusGraph, algorithm, startBuilding, endBuilding);
+  const paths = result.path;
+  const totalDistance = result.distance;
+
+  // clear previous output
+  const outputArea = document.getElementById("outputArea");
+  outputArea.innerHTML = "";
+
+  // check if paths are found
+  if (paths && paths.length > 0) {
+      // if paths[0] is an array, treat it as multiple paths (DFS)
       if (Array.isArray(paths[0])) {
-        paths.forEach((path, index) => {
-          outputArea.innerHTML += `<div style="margin-bottom: 15px;"><strong>Path ${index + 1}:</strong><br>${path.join('<br>')}</div>`;
-        });
+          paths.forEach((path, index) => {
+              outputArea.innerHTML += `<div style="margin-bottom: 15px;"><strong>Path ${index + 1}:</strong><br>${path.join('<br>')}</div>`;
+          });
       } else {
-        // otherwise, treat it as a single path (for BFS and Dijkstra)
-        outputArea.innerHTML += `<div style="margin-bottom: 15px;"><strong>Path:</strong><br>${paths.join('<br>')}</div>`;
+          // else treat it as a single path (BFS and Dijkstra)
+          outputArea.innerHTML += `<div style="margin-bottom: 15px;"><strong>Path:</strong><br>${paths.join('<br>')}</div>`;
       }
-  
-      // displays total distance if provided (Dijkstra)
+
+      // display total distance if available (Dijkstra)
       if (totalDistance !== null) {
-        outputArea.innerHTML += `<div><strong>Total Distance:</strong><br>${totalDistance} meters</div>`;
+          outputArea.innerHTML += `<div><strong>Total Distance:</strong><br>${totalDistance} meters</div>`;
       }
       drawPathOnMap(paths);
-    } else {
+  } else {
       outputArea.innerHTML = "<div><strong>Path Not Found</strong></div>";
-    }
   }
+}
+
   
   
 
