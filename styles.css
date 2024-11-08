@@ -1,0 +1,92 @@
+body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
+
+#map { width: 100vw; height: 100vh; }
+
+/* Sidebar styling */
+#sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 250px;
+  background-color: #333;
+  color: #fff;
+  overflow-x: hidden;
+  transition: width 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+#sidebarContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+#sidebar h2 {
+  margin-top: 0;
+  font-size: 18px;
+  text-align: center;
+}
+
+.sidebar-item {
+  margin: 5px 0;
+  padding: 8px;
+  width: 90%;
+  color: #333;
+  font-size: 14px;
+}
+
+#sidebar button, #sidebar select, #sidebar input {
+  font-size: 14px;
+  color: #333;
+  background-color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none;
+}
+
+#sidebar button:hover, #sidebar select:hover, #sidebar input:hover {
+  background-color: #ddd;
+}
+
+/* sidebar toggle button */
+#sidebarToggle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  background-color: transparent;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+#sidebarToggle:hover {
+  color: #ddd;
+}
+
+/* output area styling */
+#outputArea {
+  background-color: #222;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  width: 90%;
+  flex-grow: 1; 
+  overflow-y: auto;
+  font-size: 12px;
+  white-space: pre-wrap;
+}
+
+.collapsed {
+  width: 60px;
+}
+
+.collapsed #sidebarContent {
+  display: none;
+}
