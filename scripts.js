@@ -41,7 +41,8 @@ function logAlgorithmStep(nodes, index) {
     renderAllPaths(); 
 }
 
-  
+const WALKING_SPEED_MPS = 1.4; // Average walking speed in meters per second
+
 // includes formatted logging of algorithm steps and final distance
 function findPath() {
   const startBuilding = document.getElementById('startBuilding').value;
@@ -53,12 +54,10 @@ function findPath() {
       return;
   }
 
-  // call algorithms and retrieve the result
   const result = executeAlgorithm(campusGraph, algorithm, startBuilding, endBuilding);
   const paths = result.path;
   const totalDistance = result.distance;
 
-  // clear previous output
   const outputArea = document.getElementById("outputArea");
   outputArea.innerHTML = "";
 
@@ -77,7 +76,14 @@ function findPath() {
       // display total distance if available (Dijkstra)
       if (totalDistance !== null) {
           outputArea.innerHTML += `<div><strong>Total Distance:</strong><br>${totalDistance} meters</div>`;
+          
+          // calculate and display estimated time
+          const estimatedTimeSeconds = totalDistance / WALKING_SPEED_MPS;
+          const minutes = Math.floor(estimatedTimeSeconds / 60);
+          const seconds = Math.floor(estimatedTimeSeconds % 60);
+          outputArea.innerHTML += `<div><strong>Estimated Time:</strong><br>${minutes} minutes ${seconds} seconds</div>`;
       }
+
       drawPathOnMap(paths);
   } else {
       outputArea.innerHTML = "<div><strong>Path Not Found</strong></div>";
