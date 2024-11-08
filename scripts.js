@@ -92,6 +92,20 @@ function findPath() {
 
   
   
+function waitForMapStyleToLoad(map) {
+  return new Promise((resolve) => {
+      if (map.isStyleLoaded()) {
+          resolve();
+      } else {
+          const checkStyle = setInterval(() => {
+              if (map.isStyleLoaded()) {
+                  clearInterval(checkStyle);
+                  resolve();
+              }
+          }, 100); // Check every 100ms
+      }
+  });
+}
 
   
   
