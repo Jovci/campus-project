@@ -216,52 +216,54 @@ function addPathPoint(lngLat) {
   console.log("Intermediate path point added:", lngLat);
 }
 
-function renderAllPaths() {
-    if (!campusGraph.paths || campusGraph.paths.length === 0) {
+async function renderAllPaths() {
+  await waitForMapStyleToLoad(map); 
+
+  if (!campusGraph.paths || campusGraph.paths.length === 0) {
       console.warn("No paths available to render.");
       return;
-    }
-  
-    const pathFeatures = campusGraph.paths.map(path => {
+  }
+
+  const pathFeatures = campusGraph.paths.map(path => {
       console.log(`Rendering path from ${path.start} to ${path.end}`);
-      
       return {
-        type: 'Feature',
-        geometry: {
-          type: 'LineString',
-          coordinates: [
-            campusGraph.buildings[path.start].coordinates,
-            ...path.points,
-            campusGraph.buildings[path.end].coordinates
-          ]
-        }
+          type: 'Feature',
+          geometry: {
+              type: 'LineString',
+              coordinates: [
+                  campusGraph.buildings[path.start].coordinates,
+                  ...path.points,
+                  campusGraph.buildings[path.end].coordinates
+              ]
+          }
       };
-    });
-  
-    const pathGeoJSON = {
+  });
+
+  const pathGeoJSON = {
       type: 'FeatureCollection',
       features: pathFeatures
-    };
-  
-    if (map.getSource('all-paths')) {
+  };
+
+  if (map.getSource('all-paths')) {
       map.getSource('all-paths').setData(pathGeoJSON);
-    } else {
+  } else {
       map.addSource('all-paths', { type: 'geojson', data: pathGeoJSON });
       map.addLayer({
-        id: 'all-paths',
-        type: 'line',
-        source: 'all-paths',
-        layout: {
-          'line-join': 'round',
-          'line-cap': 'round'
-        },
-        paint: {
-          'line-color': '#007cbf',
-          'line-width': 3
-        }
+          id: 'all-paths',
+          type: 'line',
+          source: 'all-paths',
+          layout: {
+              'line-join': 'round',
+              'line-cap': 'round'
+          },
+          paint: {
+              'line-color': '#007cbf',
+              'line-width': 3
+          }
       });
-    }
   }
+}
+
   
 
 // renders the current path as a line on the map
@@ -299,6 +301,22 @@ function renderPath() {
       }
     });
   }
+}
+
+
+function waitForMapStyleToLoad(map) {
+  return new Promise((resolve) => {
+      if (map.isStyleLoaded()) {
+          resolve();
+      } else {
+          const checkStyle = setInterval(() => {
+              if (map.isStyleLoaded()) {
+                  clearInterval(checkStyle);
+                  resolve();
+              }
+          }, 100); // Check every 100ms
+      }
+  });
 }
 
 // saves the graph data to a JSON file
@@ -459,22 +477,24 @@ function loadFromFile() {
   }
   
   // render loaded data on the map
-  function renderLoadedData() {
+  async function renderLoadedData() {
+    await waitForMapStyleToLoad(map);
+
+    console.log("Map style has loaded. Rendering data now.");
     clearMap(); 
-    // renders building markers
+
     for (let buildingId in campusGraph.buildings) {
-      const building = campusGraph.buildings[buildingId];
-      const marker = new mapboxgl.Marker()
-        .setLngLat(building.coordinates)
-        .setPopup(new mapboxgl.Popup().setText(building.name || buildingId))
-        .addTo(map);
-  
-      markers.push(marker); // store marker reference for toggling
+        const building = campusGraph.buildings[buildingId];
+        const marker = new mapboxgl.Marker()
+            .setLngLat(building.coordinates)
+            .setPopup(new mapboxgl.Popup().setText(building.name || buildingId))
+            .addTo(map);
+        markers.push(marker); 
     }
-  
+
     populateBuildingDropdowns(); 
     renderAllPaths();
-  }
+}
   
 
   
