@@ -20,6 +20,27 @@ function logAlgorithmStep(nodes, index) {
     outputArea.scrollTop = outputArea.scrollHeight; // Auto-scroll to the latest entry
   }
   
+
+  function blockPath() {
+    const start = document.getElementById('blockStart').value;
+    const end = document.getElementById('blockEnd').value;
+
+    if (!start || !end) {
+        alert("Please select both start and end buildings to block the path.");
+        return;
+    }
+
+    // remove path from campusGraph
+    campusGraph.paths = campusGraph.paths.filter(path => 
+        !(path.start === start && path.end === end) &&
+        !(path.start === end && path.end === start)
+    );
+
+    console.log(`Path from ${start} to ${end} blocked and removed from campusGraph.`);
+    saveCampusGraphToServer(); 
+    renderAllPaths(); 
+}
+
   
 // includes formatted logging of algorithm steps and final distance
 function findPath() {
@@ -136,37 +157,27 @@ function findPath() {
   function populateBuildingDropdowns() {
     const startDropdown = document.getElementById('startBuilding');
     const endDropdown = document.getElementById('endBuilding');
-  
-    // clears current dropdown options
+    const blockStartDropdown = document.getElementById('blockStart');
+    const blockEndDropdown = document.getElementById('blockEnd');
+
     startDropdown.innerHTML = '<option value="">Select Start Building</option>';
     endDropdown.innerHTML = '<option value="">Select End Building</option>';
-  
-    // Get building names from campusGraph and log them
-    const buildingNames = Object.keys(campusGraph.buildings);
-    console.log("Building names retrieved from campusGraph:", buildingNames);
-  
-    // Sort the building names alphabetically and log the sorted list
-    const sortedBuildingNames = buildingNames.sort();
-    console.log("Sorted building names:", sortedBuildingNames);
-  
-    // Populate sorted building names in both dropdowns
+    blockStartDropdown.innerHTML = '<option value="">Select Start Building</option>';
+    blockEndDropdown.innerHTML = '<option value="">Select End Building</option>';
+
+    const sortedBuildingNames = Object.keys(campusGraph.buildings).sort();
     sortedBuildingNames.forEach(building => {
-      const buildingName = campusGraph.buildings[building].name || building; // Use name or fallback to ID
-  
-      console.log("Adding building to dropdown:", buildingName);
-  
-      const startOption = document.createElement('option');
-      startOption.value = building;
-      startOption.textContent = buildingName;
-  
-      const endOption = document.createElement('option');
-      endOption.value = building;
-      endOption.textContent = buildingName;
-  
-      startDropdown.appendChild(startOption);
-      endDropdown.appendChild(endOption);
+        const buildingName = campusGraph.buildings[building].name || building;
+
+        [startDropdown, endDropdown, blockStartDropdown, blockEndDropdown].forEach(dropdown => {
+            const option = document.createElement('option');
+            option.value = building;
+            option.textContent = buildingName;
+            dropdown.appendChild(option);
+        });
     });
-  }
+}
+
   
   
   // call this function after loading the campusGraph data

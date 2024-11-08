@@ -11,37 +11,43 @@
   <div id="map"></div>
 
   <div id="sidebar">
-    <button onclick="toggleSidebar()" id="sidebarToggle">☰</button> 
     <div id="sidebarContent">
       <h2>Campus Navigator</h2>
-      
-      <input type="file" id="loadFile" accept=".json" onchange="loadFromFile()" class="sidebar-item">
+  
       <input type="text" id="buildingName" placeholder="Building Name" class="sidebar-item">
       <button onclick="addBuildingPoint()" class="sidebar-item">Add Building</button>
-      
+  
       <select id="startBuilding" class="sidebar-item">
-        <option value="">Select Start Building</option>
+          <option value="">Select Start Building</option>
       </select>
       <select id="endBuilding" class="sidebar-item">
-        <option value="">Select End Building</option>
+          <option value="">Select End Building</option>
       </select>
+  
       <select id="algorithmSelect" class="sidebar-item">
-        <option value="bfs">BFS</option>
-        <option value="dfs">DFS</option>
-        <option value="dijkstra">Dijkstra's</option>
+          <option value="bfs">BFS</option>
+          <option value="dfs">DFS</option>
+          <option value="dijkstra">Dijkstra's</option>
       </select>
-      
+  
       <button onclick="findPath()" class="sidebar-item">Find Path</button>
       <button onclick="startPath()" class="sidebar-item">Start Path</button>
       <button onclick="endPath()" class="sidebar-item">End Path</button>
-      <button onclick="saveToJSON()" class="sidebar-item">Save JSON</button>
-      
       <button onclick="togglePathsVisibility()" class="sidebar-item">Show/Hide Paths</button>
       <button onclick="toggleMarkersVisibility()" class="sidebar-item">Show/Hide Markers</button>
-
+  
+      <h3>Block Path</h3>
+      <select id="blockStart" class="sidebar-item">
+          <option value="">Select Start Building</option>
+      </select>
+      <select id="blockEnd" class="sidebar-item">
+          <option value="">Select End Building</option>
+      </select>
+      <button onclick="blockPath()" class="sidebar-item">Block Path</button>
+  
       <div id="outputArea" class="sidebar-item">Algorithm output will appear here...</div>
-    </div>
   </div>
+  
 
   <script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
   <script src="map.js"></script>
