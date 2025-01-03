@@ -1,7 +1,7 @@
 # Campus Navigation Map Project
 Find it here
 
-https://campus-navigation-map-e30899f74f8f.herokuapp.com/
+https://campus-navigation-7ef5da18f01b.herokuapp.com/
 
 Slides here
 
